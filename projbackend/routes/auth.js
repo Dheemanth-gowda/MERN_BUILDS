@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const { signup, signout, signin } = require("../controllers/auth");
+const { signup, signout, signin, isSignedIn } = require("../controllers/auth");
 const { body, validationResult } = require("express-validator");
 const { check } = require("express-validator");
 
@@ -23,8 +23,12 @@ router.post(
         check("email", "Enter a valid email Id").isEmail(),
         check("password", "password field is required!!").isLength({ min: 1 }),
     ],
-    signup
+    signin
 );
+
+router.get("/signintest", isSignedIn, (req, res) => {
+    res.send("Resctricted Routes!!");
+});
 
 router.get("/signout", signout);
 
