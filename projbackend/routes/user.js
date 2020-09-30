@@ -1,14 +1,18 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
+const {
+    getUserById,
+    getUser,
+    updateUser,
+    getAllUsers,
+} = require("../controllers/user");
 const { isSignedIn, isAuthenticated, isAdmin } = require("../controllers/auth");
 
-const { getUserById, getUser, getAllUsers } = require("../controllers/user");
+router.param("userId", getUserById);
 
-router.param("id", getUserById);
-
-router.get("/user/:id", isSignedIn, isAuthenticated, getUser);
+router.get("/user/:userId", isSignedIn, isAuthenticated, getUser);
+router.put("/user/:userId", isSignedIn, isAuthenticated, updateUser);
 
 router.get("/users", getAllUsers);
-
 module.exports = router;
