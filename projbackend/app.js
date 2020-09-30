@@ -6,7 +6,10 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+
+//Routes Import:
 const authRotes = require("./routes/auth");
+const userRotes = require("./routes/user");
 
 //CONNECTION:
 const port = process.env.PORT || 8000;
@@ -32,6 +35,7 @@ app.use(cookieParser());
 
 //ROUTES:
 app.use("/api", authRotes);
+app.use("/api", userRotes);
 
 app.listen(8000, function() {
     console.log("Example app listening on port 8000!");

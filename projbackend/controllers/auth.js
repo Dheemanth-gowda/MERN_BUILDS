@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { validationResult } = require("express-validator");
+const { validationResult, check } = require("express-validator");
 var jwt = require("jsonwebtoken");
 var expressJwt = require("express-jwt");
 
@@ -58,5 +58,27 @@ exports.signout = (req, res) => {
 //NOTE: Protected Routes
 exports.isSignedIn = expressJwt({
     secret: process.env.SECRET,
-    userProperty: "auth"
-})
+    userProperty: "auth",
+});
+
+//Custom Middleware:
+
+exports.isAuthenticated = (req, res, next) => {
+    let Checker = req.profile && req.auth && req.profile._id == req.auth._id;
+
+    if (!Checker) {
+        res.status(403).json({
+            error: "ACCESS DENIED!!!",
+        });
+    }
+    next();
+};
+
+exports.isAdmin = (req, res, next) => {
+    if (req.profile.role === 0) {
+        return res.send(400).json({
+            error: "You are not Admin , Acess Denied",
+        });
+    }
+    next();
+};
