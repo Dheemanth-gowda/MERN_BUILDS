@@ -43,6 +43,8 @@ exports.updateUser = (req, res) => {
     );
 };
 
+//@note Push the product to order list
+
 exports.userPurchaseList = (req, res) => {
     Order.find({ user: req.profile._id })
         .populate("User", "_id name")
@@ -55,6 +57,35 @@ exports.userPurchaseList = (req, res) => {
             return res.status(200).json(order);
         });
 };
+
+//@note push to purchases in user.
+
+exports.pushOrderInPurchaseList = (req, res, next) => {
+    let purchases = [];
+    req.body.Order.products.forEach((product) => {
+        purchases.push({
+            _id: product._id,
+            name: product.name,
+            description: product.description,
+            category: product.category,
+            quantity: product.quantity,
+            amount: req.body.Order.amount,
+            transaction_id: req.body.Order.transaction_id,
+        });
+    });
+    User.findOneAndUpdate({ _id: req.profile._id }, { $push: { purchases: purchases } }, { new: true },
+        (err, purchases) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "There is an error to save purchase List",
+                });
+            }
+            next();
+        }
+    );
+};
+
+//NOTE: Store it in database
 
 exports.getUser = (req, res) => {
     //NOTE: Need to look into the password stuff
