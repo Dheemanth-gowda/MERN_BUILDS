@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const authRotes = require("./routes/auth");
 const userRotes = require("./routes/user");
 const categoryRoutes = require("./routes/catergory");
+const productRoutes = require("./routes/product");
 
 //CONNECTION:
 const port = process.env.PORT || 8000;
@@ -38,6 +39,7 @@ app.use(cookieParser());
 app.use("/api", authRotes);
 app.use("/api", userRotes);
 app.use("/api", categoryRoutes);
+app.use("/api", productRoutes);
 
 app.listen(8000, function() {
     console.log("Example app listening on port 8000!");
