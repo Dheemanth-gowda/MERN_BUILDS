@@ -37,7 +37,7 @@ app.use(cookieParser());
 //ROUTES:
 app.use("/api", authRotes);
 app.use("/api", userRotes);
-app.use("api", categoryRoutes);
+app.use("/api", categoryRoutes);
 
 app.listen(8000, function() {
     console.log("Example app listening on port 8000!");
