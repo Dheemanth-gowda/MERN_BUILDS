@@ -12,9 +12,10 @@ const authRotes = require("./routes/auth");
 const userRotes = require("./routes/user");
 const categoryRoutes = require("./routes/catergory");
 const productRoutes = require("./routes/product");
+const orderRoutes = require("./routes/order");
 
 //CONNECTION:
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
 
 mongoose
     .connect(process.env.DATABASE, {
@@ -40,9 +41,10 @@ app.use("/api", authRotes);
 app.use("/api", userRotes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
+app.use("/api", orderRoutes);
 
 app.listen(8000, function() {
-    console.log("Example app listening on port 8000!");
+    console.log(`Example app listening on port !${port}`);
 });
 
 app.get("/", (req, res) => {

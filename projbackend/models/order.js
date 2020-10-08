@@ -24,6 +24,11 @@ const orderSchema = new Schema({
     updated: {
         type: Date,
     },
+    status: {
+        type: String,
+        default: "Recieved",
+        enum: ["cancelled", "Delivered", "Shipped", "Processing", "Recieved"],
+    },
     User: {
         type: { ObjectId },
         ref: "User",
