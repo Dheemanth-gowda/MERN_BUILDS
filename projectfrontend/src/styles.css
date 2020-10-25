@@ -14,3 +14,13 @@ footer {
     left: 0;
     right: 0;
 }
+
+.nav-item {
+    cursor: pointer;
+    padding: 10px;
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
+}
