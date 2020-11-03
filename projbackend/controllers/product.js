@@ -2,8 +2,6 @@ const Product = require("../models/product");
 const formidable = require("formidable");
 const _ = require("lodash");
 const fs = require("fs");
-// const product = require("../models/product");
-const { sortBy } = require("lodash");
 
 exports.getProductById = (req, res, next, id) => {
     Product.findById(id)
@@ -20,7 +18,7 @@ exports.getProductById = (req, res, next, id) => {
 };
 
 exports.createProduct = (req, res) => {
-    const form = formidable({ multiples: true });
+    let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
     form.parse(req, (err, fields, file) => {
@@ -50,12 +48,13 @@ exports.createProduct = (req, res) => {
             product.photo.data = fs.readFileSync(file.photo.path);
             product.photo.contentType = file.photo.type;
         }
+        // console.log(product);
 
         //save to the DB
         product.save((err, product) => {
             if (err) {
                 res.status(400).json({
-                    error: "Saving product in DB failed",
+                    error: "Saving tshirt in DB failed",
                 });
             }
             res.json(product);
@@ -63,38 +62,39 @@ exports.createProduct = (req, res) => {
     });
 };
 
-//NOTE   Here note that there is a optimization of code:
-
 exports.getProduct = (req, res) => {
     req.product.photo = undefined;
     return res.json(req.product);
 };
 
+//middleware
 exports.photo = (req, res, next) => {
-    if (req.Product.photo.data) {
-        res.set("content-type", req.product.photo.contentType);
+    if (req.product.photo.data) {
+        res.set("Content-Type", req.product.photo.contentType);
         return res.send(req.product.photo.data);
     }
     next();
 };
 
-exports.deleteProducts = (req, res) => {
+// delete controllers
+exports.deleteProduct = (req, res) => {
     let product = req.product;
-    product.remove((err, deleteProduct) => {
+    product.remove((err, deletedProduct) => {
         if (err) {
-            res.status(403).json({
-                Error: "Failed to delete the product from database",
+            return res.status(400).json({
+                error: "Failed to delete the product",
             });
         }
-        return res.json({
-            message: "Product deleted Successfully!!!",
-            deleteProduct,
+        res.json({
+            message: "Deletion was a success",
+            deletedProduct,
         });
     });
 };
 
-exports.updateProducts = (req, res) => {
-    const form = formidable({ multiples: true });
+// delete controllers
+exports.updateProduct = (req, res) => {
+    let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
     form.parse(req, (err, fields, file) => {
@@ -104,9 +104,10 @@ exports.updateProducts = (req, res) => {
             });
         }
 
-        //Use lodash to extend the required fields.
+        //updation code
         let product = req.product;
         product = _.extend(product, fields);
+
         //handle file here
         if (file.photo) {
             if (file.photo.size > 3000000) {
@@ -117,12 +118,13 @@ exports.updateProducts = (req, res) => {
             product.photo.data = fs.readFileSync(file.photo.path);
             product.photo.contentType = file.photo.type;
         }
+        // console.log(product);
 
         //save to the DB
         product.save((err, product) => {
             if (err) {
                 res.status(400).json({
-                    error: "Updating of product in DB failed",
+                    error: "Updation of product failed",
                 });
             }
             res.json(product);
@@ -130,29 +132,43 @@ exports.updateProducts = (req, res) => {
     });
 };
 
+//product listing
+
 exports.getAllProducts = (req, res) => {
     let limit = req.query.limit ? parseInt(req.query.limit) : 8;
     let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
-    product
-        .find()
+
+    Product.find()
         .select("-photo")
         .populate("category")
-        .limit(limit)
         .sort([
             [sortBy, "asc"]
         ])
+        .limit(limit)
         .exec((err, products) => {
             if (err) {
+                console.log(err);
                 return res.status(400).json({
-                    error: "No Product was found!!!",
+                    error: "NO product FOUND in data base",
                 });
             }
-            res.status(200).json(products);
+            res.json(products);
         });
 };
 
+exports.getAllUniqueCategories = (req, res) => {
+    Product.distinct("category", {}, (err, category) => {
+        if (err) {
+            return res.status(400).json({
+                error: "NO category found",
+            });
+        }
+        res.json(category);
+    });
+};
+
 exports.updateStocks = (req, res, next) => {
-    let myOperation = req.body.order.products.map((prod) => {
+    let myOperations = req.body.order.products.map((prod) => {
         return {
             updateOne: {
                 filter: { _id: prod._id },
@@ -160,23 +176,13 @@ exports.updateStocks = (req, res, next) => {
             },
         };
     });
-    Product.bulkWrite(myOperation, {}, (err, products) => {
+
+    Product.bulkWrite(myOperations, {}, (err, products) => {
         if (err) {
             return res.status(400).json({
-                Error: "Bulk operation has failed!!!",
+                error: "Bulk operation failed",
             });
         }
         next();
-    });
-};
-
-exports.getAllUniqueCategories = (req, res) => {
-    Product.distinct("category", {}, (err, category) => {
-        if (err) {
-            return res.status(400).json({
-                Error: "No category is found!!!",
-            });
-        }
-        res.json(category);
     });
 };

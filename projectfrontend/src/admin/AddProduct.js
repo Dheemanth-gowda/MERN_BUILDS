@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import Base from "../core/Base";
 import { Link } from "react-router-dom";
 import { getAllCategory } from "./helper/adminapicall";
+import { isAutheticated } from "../auth/helper";
+import { createProduct } from "./helper/adminapicall";
 
 const AddProduct = () => {
+  const { user, token } = isAutheticated();
+
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -40,25 +44,70 @@ const AddProduct = () => {
 
   const preLoad = () => {
     getAllCategory().then((data) => {
+      // console.log(data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        setValues({ ...values, categories: data });
-        console.log(categories);
+        setValues({ ...values, categories: data, formData: new FormData() });
       }
     });
   };
 
-  const onSubmit = () => {
-    //
+  const successMessage = () => {
+    return (
+      <div
+        className="alert alert-success mt-3 text-center"
+        style={{ display: createdProduct ? " " : "none" }}
+      >
+        <h4>{createdProduct} Created successfully</h4>
+      </div>
+    );
+  };
+
+  const errorMessage = () => {
+    return (
+      <div
+        className="alert alert-danger mt-3 text-center"
+        style={{ display: error ? " " : "none" }}
+      >
+        <h4>There is an error in creating {createdProduct}.</h4>
+      </div>
+    );
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setValues({ ...values, error: "", loading: true });
+    createProduct(user._id, token, formData)
+      .then((data) => {
+        if (data.error) {
+          setValues({ ...values, error: data.error });
+        } else {
+          setValues({
+            ...values,
+            name: "",
+            description: "",
+            price: "",
+            photo: "",
+            stock: "",
+            loading: false,
+            createdProduct: data.name,
+          });
+        }
+      })
+      .catch((err) => {});
   };
 
   const handleChange = (name) => (event) => {
-    //
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    formData.set(name, value);
+    setValues({ ...values, [name]: value });
   };
 
   const createProductForm = () => (
     <form>
+      {successMessage()}
+      {errorMessage()}
       <span>Post photo</span>
       <div className="form-group">
         <label className="btn btn-block btn-success">
@@ -67,6 +116,7 @@ const AddProduct = () => {
             type="file"
             name="photo"
             accept="image"
+            required
             placeholder="choose a file"
           />
         </label>
@@ -105,11 +155,17 @@ const AddProduct = () => {
           placeholder="Category"
         >
           <option>Select</option>
+          {categories &&
+            categories.map((cate, index) => (
+              <option key={index} value={cate._id}>
+                {cate.name}
+              </option>
+            ))}
         </select>
       </div>
       <div className="form-group">
         <input
-          onChange={handleChange("quantity")}
+          onChange={handleChange("stock")}
           type="number"
           className="form-control"
           placeholder="Quantity"

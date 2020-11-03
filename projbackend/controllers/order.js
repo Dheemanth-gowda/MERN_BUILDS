@@ -25,7 +25,7 @@ exports.createOrder = (req, res) => {
                 Error: "There is an error in placing the order!!!",
             });
         }
-        res.json(order);
+        return res.json(order);
     });
 };
 

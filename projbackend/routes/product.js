@@ -1,25 +1,25 @@
 const express = require("express");
 const router = express.Router();
 
-const { getUserById } = require("../controllers/user");
 const {
     getProductById,
     createProduct,
-    deleteProducts,
-    updateProducts,
     getProduct,
     photo,
+    updateProduct,
+    deleteProduct,
     getAllProducts,
     getAllUniqueCategories,
 } = require("../controllers/product");
 const { isSignedIn, isAuthenticated, isAdmin } = require("../controllers/auth");
+const { getUserById } = require("../controllers/user");
 
-//Param
+//all of params
 router.param("userId", getUserById);
 router.param("productId", getProductById);
 
-//Actual Routers here:
-
+//all of actual routes
+//create route
 router.post(
     "/product/create/:userId",
     isSignedIn,
@@ -28,30 +28,29 @@ router.post(
     createProduct
 );
 
-//Get routes:
+// read routes
 router.get("/product/:productId", getProduct);
-router.get("product/photo/:productId", photo);
+router.get("/product/photo/:productId", photo);
 
-//Delete Routes:
+//delete route
 router.delete(
-    "/products/:productId/:userId",
+    "/product/:productId/:userId",
     isSignedIn,
     isAuthenticated,
     isAdmin,
-    deleteProducts
+    deleteProduct
 );
 
+//update route
 router.put(
-    "/products/:productId/:userId",
+    "/product/:productId/:userId",
     isSignedIn,
     isAuthenticated,
     isAdmin,
-    updateProducts
+    updateProduct
 );
-//Update Routes:
-router.put("/products/:productId/:userId", updateProducts);
 
-//Listing Routes:
+//listing route
 router.get("/products", getAllProducts);
 
 router.get("/products/categories", getAllUniqueCategories);

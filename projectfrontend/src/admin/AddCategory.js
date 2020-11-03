@@ -48,7 +48,7 @@ const AddCategory = () => {
   const successMessage = () => {
     if (success) {
       return (
-        <div class="alert alert-success" role="alert">
+        <div className="alert alert-success" role="alert">
           Category Succesfully created!!!
         </div>
       );
@@ -58,7 +58,7 @@ const AddCategory = () => {
   const errorMessage = () => {
     if (error) {
       return (
-        <div class="alert alert-danger" role="alert">
+        <div className="alert alert-danger" role="alert">
           There was an error in creating the category!!!
         </div>
       );

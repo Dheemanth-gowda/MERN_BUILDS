@@ -25,7 +25,7 @@ const SignIn = () => {
     return (
       loading && (
         <div className="alert alert-info">
-          <h2>Loading....</h2>
+          <h2> Loading.... </h2>
         </div>
       )
     );
@@ -49,29 +49,27 @@ const SignIn = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     setvalue({ ...value, error: false, loading: true });
-    signin({ email, password })
-      .then((data) => {
-        if (data.error) {
-          setvalue({ ...value, error: data.error, loading: false });
-        } else {
-          authenticate(data, () => {
-            setvalue({
-              ...value,
-              didRedirect: true,
-            });
+    signin({ email, password }).then((data) => {
+      if (data.error) {
+        setvalue({ ...value, error: data.error, loading: false });
+      } else {
+        authenticate(data, () => {
+          setvalue({
+            ...value,
+            didRedirect: true,
           });
-        }
-      })
-      .catch(console.log("SignIn failed"));
+        });
+      }
+    });
   };
 
   const performRedirect = () => {
     //TODO need to look into this
     if (didRedirect) {
       if (user && user.role === 1) {
-        return <Redirect to="/admin/dashboard"/>
+        return <Redirect to="/admin/dashboard" />;
       } else {
-        return<Redirect to="/user/dashboard"/>
+        return <Redirect to="/user/dashboard" />;
       }
     }
     if (isAutheticated()) {
@@ -85,7 +83,7 @@ const SignIn = () => {
         <div className="col-md-6 offset-sm-3 text-left">
           <form>
             <div className="form-group">
-              <label className="text-light"> Email</label>
+              <label className="text-light"> Email </label>
               <input
                 onChange={handleChange("email")}
                 className="form-control shadow p-3 rounded"
@@ -94,7 +92,7 @@ const SignIn = () => {
               />
             </div>
             <div className="form-group">
-              <label className="text-light"> Password</label>
+              <label className="text-light"> Password </label>
               <input
                 onChange={handleChange("password")}
                 className="form-control shadow p-3 rounded"
@@ -116,10 +114,7 @@ const SignIn = () => {
 
   return (
     <Base title="SignIn Page" description="Page to SignIn User">
-      {loadingMessage()}
-      {errorMessage()}
-      {SignInForm()}
-      {performRedirect()}
+      {loadingMessage()} {errorMessage()} {SignInForm()} {performRedirect()}
     </Base>
   );
 };

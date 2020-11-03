@@ -10,6 +10,7 @@ import AdminDashboard from "./user/AdminDashBoard";
 import AddCategory from "./admin/AddCategory";
 import ManageCategories from "./admin/ManageCategories";
 import AddProduct from "./admin/AddProduct";
+import ManageProducts from "./admin/ManageProducts";
 
 const Routes = () => {
   return (
@@ -24,7 +25,7 @@ const Routes = () => {
           <AdminRoute path="/admin/create/category" component={AddCategory} />
           <AdminRoute path="/admin/categories" component={ManageCategories} />
           <AdminRoute path="/admin/create/product" component={AddProduct} />
-          {/* <Route component={}/> */}
+          <AdminRoute path="/admin/products" component={ManageProducts} />
         </Switch>
       </BrowserRouter>
     </div>
