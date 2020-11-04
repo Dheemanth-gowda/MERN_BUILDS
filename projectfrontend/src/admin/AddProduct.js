@@ -59,7 +59,11 @@ const AddProduct = () => {
         className="alert alert-success mt-3 text-center"
         style={{ display: createdProduct ? " " : "none" }}
       >
-        <h4>{createdProduct} Created successfully</h4>
+        <h4>
+          {" "}
+          {createdProduct}
+          Created successfully{" "}
+        </h4>{" "}
       </div>
     );
   };
@@ -70,7 +74,7 @@ const AddProduct = () => {
         className="alert alert-danger mt-3 text-center"
         style={{ display: error ? " " : "none" }}
       >
-        <h4>There is an error in creating {createdProduct}.</h4>
+        <h4> There is an error in creating {createdProduct}. </h4>{" "}
       </div>
     );
   };
@@ -106,9 +110,8 @@ const AddProduct = () => {
 
   const createProductForm = () => (
     <form>
-      {successMessage()}
-      {errorMessage()}
-      <span>Post photo</span>
+      {" "}
+      {successMessage()} {errorMessage()} <span> Post photo </span>{" "}
       <div className="form-group">
         <label className="btn btn-block btn-success">
           <input
@@ -119,8 +122,8 @@ const AddProduct = () => {
             required
             placeholder="choose a file"
           />
-        </label>
-      </div>
+        </label>{" "}
+      </div>{" "}
       <div className="form-group">
         <input
           onChange={handleChange("name")}
@@ -128,8 +131,8 @@ const AddProduct = () => {
           className="form-control"
           placeholder="Name"
           value={name}
-        />
-      </div>
+        />{" "}
+      </div>{" "}
       <div className="form-group">
         <textarea
           onChange={handleChange("description")}
@@ -137,8 +140,8 @@ const AddProduct = () => {
           className="form-control"
           placeholder="Description"
           value={description}
-        />
-      </div>
+        />{" "}
+      </div>{" "}
       <div className="form-group">
         <input
           onChange={handleChange("price")}
@@ -146,23 +149,24 @@ const AddProduct = () => {
           className="form-control"
           placeholder="Price"
           value={price}
-        />
-      </div>
+        />{" "}
+      </div>{" "}
       <div className="form-group">
         <select
           onChange={handleChange("category")}
           className="form-control"
           placeholder="Category"
         >
-          <option>Select</option>
+          <option> Select </option>{" "}
           {categories &&
             categories.map((cate, index) => (
               <option key={index} value={cate._id}>
-                {cate.name}
+                {" "}
+                {cate.name}{" "}
               </option>
-            ))}
-        </select>
-      </div>
+            ))}{" "}
+        </select>{" "}
+      </div>{" "}
       <div className="form-group">
         <input
           onChange={handleChange("stock")}
@@ -170,16 +174,15 @@ const AddProduct = () => {
           className="form-control"
           placeholder="Quantity"
           value={stock}
-        />
+        />{" "}
       </div>
-
       <button
         type="submit"
         onClick={onSubmit}
         className="btn btn-outline-success mb-3"
       >
-        Create Product
-      </button>
+        Create Product{" "}
+      </button>{" "}
     </form>
   );
 
@@ -190,11 +193,11 @@ const AddProduct = () => {
       className="container bg-info p-4"
     >
       <Link to="/admin/dashboard" className="btn btn-md btn-dark mb-3">
-        Admin Home
-      </Link>
+        Admin Home{" "}
+      </Link>{" "}
       <div className="row bg-dark text-white rounded">
-        <div className="col-md-8 offset-md-2">{createProductForm()}</div>
-      </div>
+        <div className="col-md-8 offset-md-2"> {createProductForm()} </div>{" "}
+      </div>{" "}
     </Base>
   );
 };

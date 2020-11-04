@@ -12,12 +12,12 @@ const AdminDashboard = () => {
   const adminLeft = () => {
     return (
       <div className="card">
-        <h4 className="card-header bg-dark text-white">Admin Navigation</h4>
+        <h4 className="card-header bg-dark text-white"> Admin Navigation </h4>
         <ul className="list-group">
           <li className="list-group-item text-center text-danger">
             {/*
-          Use for opening the link in new tab
-           target="_blank" */}
+                          Use for opening the link in new tab
+                           target="_blank" */}
             <Link
               to="/admin/create/category"
               className="nav-link p-3 mb-2 bg-warning text-dark"
@@ -65,20 +65,22 @@ const AdminDashboard = () => {
     return (
       <div>
         <div className="card mb-4">
-          <h4 className="card-header text-center"> Admin Information</h4>
+          <h4 className="card-header text-center"> Admin Information </h4>
           <ul className="list-group">
             <div className="container p-3  mt-3 ">
               <li className="list-group-item m-5">
-                <span className="badge badge-success p-2 mr-5">Name: </span>
+                <span className="badge badge-success p-2 mr-5"> Name: </span>
                 {name}
               </li>
               <li className="list-group-item m-5">
-                <span className="badge badge-success p-2 mr-5">Email: </span>
+                <span className="badge badge-success p-2 mr-5"> Email: </span>
                 {email}
               </li>
             </div>
             <li className="list-group-item">
-              <span className="badge badge-danger p-2 mr-5">ADMIN AREA</span>
+              <span className="badge badge-danger p-2 mr-5">
+                ADMIN AREA: BE CAREFUL
+              </span>
             </li>
           </ul>
         </div>
@@ -92,9 +94,8 @@ const AdminDashboard = () => {
       className="container bg-success p-4"
     >
       <div className="row mb-4">
-        <div className="col-3">{adminLeft()}</div>
-
-        <div className="col-9">{adminRight()}</div>
+        <div className="col-3"> {adminLeft()} </div>
+        <div className="col-9"> {adminRight()} </div>
       </div>
     </Base>
   );
